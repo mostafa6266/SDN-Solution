@@ -1,0 +1,340 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+
+ 
+  <style>
+    
+    /* ... (existing styles) ... */
+    
+    .switch-navbar, .switch-box {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr)); /* Adjust based on your content */
+    gap: 1em;
+}
+
+.switch-navbar > div, .switch-box > div {
+    text-align: left; /* Align text to the left */
+}
+
+/* Style for links to look like plain text */
+.plain-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.status-up{
+    color: rgb(3, 168, 3);
+}
+.status-down{
+    color: rgb(255, 0, 0);
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center">
+            <div>
+            <h2 style="margin-left: -285px; padding-left: 10px; font-size: 30px; color: rgb(238, 237, 238);">ASUH.SDN</h2>
+        </div>
+
+            <nav id="navbar" class="navbar" style="text-align: center; padding-left: 1030px;">
+                <ul >
+                    <li><a class="nav-link scrollto active" href="/" style="font-size: 17px;" >Home</a></li>
+                    <li><a href="/search" style="font-size: 17px;" >Search</a></li> 
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/switching/">Switches</a></li>
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/acsess_point/">Access Point</a></li>
+                    
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <li>  <button class="getstarted scrollto" type="submit">Logout</button></li>
+                    </form>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+                
+            </nav>
+            <!-- .navbar -->
+          
+        </div>
+    
+        
+    </header>
+    <!-- End Header -->
+
+    <main id="main">
+<!--  -->
+
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 5px; margin: 10px;">
+
+        <!-- Logo container -->
+        <div style="width: 100px; height: 100px; margin-top: 0; padding-top: 0;">
+            <img src="../static/images/asuh-removebg-preview.png" alt="" style="width: 100%; height: auto;">
+        </div>  
+
+        <!-- Button -->
+        <div style="flex-grow: 1; padding-left: 450px;">
+            <button style="background-color: rgba(40, 58, 90, 0.9); font-size: 20px;" onclick="toggleAllSwitches()">Toggle All Switches</button>
+        </div>
+    </div>
+</section>
+
+        
+        
+        
+        
+        <!-- <div style=" position: relative; ">    
+           
+        </div> -->
+        <!-- End Breadcrumbs -->
+        
+        
+        
+        <!-- Trigger/Open The Modal -->
+        <button id="myBtn"style="background-color: rgba(40, 58, 90, 0.9);">Add Access Point</button>
+
+        <!-- Buildings and Switches -->
+        {% for item in buildings %}
+       <!-- ... existing code ... -->
+
+      
+<!-- ... existing code ... -->
+<div class="switch-summary" style="padding-left: 250px;">
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <form method="post">
+              {% csrf_token %}
+              {{ access_point_form.as_p }}
+              <button type="submit" name="submit_access_point">Save Access Point</button>
+          </form>
+        </div>
+      
+      </div>
+      
+</div>
+        
+    <div style="padding-top: 30px; padding-left: 10px;" class="building"> <!-- Reduced padding-bottom -->
+        <div class="switch-box"> 
+            <div>
+                
+                <a href="#" class="plain-link" style="color: rgb(255, 255, 255); font-weight: bold; background-color: rgba(40, 58, 90, 0.9); display: block; width: 200px; text-align: center; padding: 10px; border-radius: 100px; font-size: 20px; " onclick="event.preventDefault(); toggleSwitches('switches-{{ item.id }}')">{{ item.name }}</a>
+                <hr style="width: 470%; margin: 20px auto;">
+                
+            </div> 
+            
+        
+            <!-- ... other switch-box divs ... -->
+        </div>
+        
+        
+        <!-- ... -->
+    </div>
+    <div id="switches-{{ item.id }}" class="switches" style="display: none; font-weight: bold;">
+        <div id="switch-navbar" class="switch-navbar" style="padding-left: 250px; font-size: 20px; font-weight: bold; color: rgb(107, 170, 230); ">
+            <div>Wifi name</div>
+            <div>IP Address</div>
+            <div>Vendor</div>
+            <div>Mac address</div>
+            <div>connection</div>
+            
+        </div>
+        
+        <hr style="width: 80%; margin: 20px auto; "> 
+        {% for access_point in item.accesspoint_set.all %}
+            <div class="switch-box" style="padding-left: 250px; margin-bottom: 20px; color: rgba(40, 58, 90, 0.9);"> <!-- Added margin-bottom -->
+                <div>{{ access_point.name }}</div>
+                <div>{{ access_point.ip_address }}</div>
+                <div>{{ access_point.vendor }}</div>
+                <div>{{ access_point.mac_address }}</div>
+                <div><a href="{% url 'access_point' access_point.id %}">more details</a></div>
+            </div>
+            {% if not forloop.last %} <!-- Check if it's not the last item in the loop -->
+                <hr style="width: 80%; margin: 20px auto;"> <!-- Horizontal line as a separator -->
+            {% endif %}
+            
+        {% endfor %}
+        <hr style="width: 80%; margin: 20px auto;"> 
+        
+    </div>
+    
+            </div>
+        </div>
+        {% endfor %}
+
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <div >
+        <footer id="footer" style="position: relative;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 60px; /* Adjust to your footer's height */
+        ">
+            <div class="container footer-bottom clearfix">
+                <div class="copyright">
+                    &copy;<strong><span> Eng: Moustafa Mohamed</span></strong>
+                </div>
+                <div class="credits">
+                    
+                </div>
+            </div>
+        </footer>
+    </div> 
+    <!-- End Footer -->
+
+   
+    <script src="../static/assets/vendor/aos/aos.js "></script>
+    <script src="../static/assets/vendor/glightbox/js/glightbox.min.js "></script>
+    <script src="../static/assets/vendor/swiper/swiper-bundle.min.js "></script>
+ 
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var searchForm = document.getElementById('search-form');
+            searchForm.addEventListener('submit', function() {
+                document.getElementById('loader').style.display = 'block';
+            });
+        });
+    </script>
+    <script>
+ function toggleSwitches(id) {
+    var switches = document.getElementById(id);
+
+    if (switches.style.display === "none" || switches.style.display === "") {
+        switches.style.display = "block";
+    } else {
+        switches.style.display = "none";
+    }
+}
+
+
+
+    
+function toggleAllSwitches() {
+    var allSwitches = document.getElementsByClassName('switches');
+    for (var i = 0; i < allSwitches.length; i++) {
+        var switches = allSwitches[i];
+
+        if (switches.style.display === "none" || switches.style.display === "") {
+            switches.style.display = "block";
+        } else {
+            switches.style.display = "none";
+        }
+    }
+}
+
+
+    </script>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+        </script>
+        
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

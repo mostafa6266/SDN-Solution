@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <style>
+        body {
+            background-size: cover;
+            background-image: url("{% static 'images/po.jpg' %}");
+
+            transition: background-image 100s ease-in-out;
+        }
+      
+    </style>    
+</head>
+
+<body style="padding-top: 220px; ">
+    <div class="wrapper" >
+                       
+        <div class="logo1">
+            
+            <img style="width: 100px;" src="../static/images/asuh-removebg-preview.png" >
+        </div>
+        <div class="text-center mt-4 name">
+           <h4 style="margin-top: 10px;"> ASUH SDN Solution</h4>
+        </div>
+        
+        <form class="p-3 mt-3"  method="post" action="" >
+            {% csrf_token %}
+            <div class="form-field d-flex align-items-center">
+                <span class="far fa-user"></span>
+                <label for="username">Username</label>
+                <input type="text" name="username" id="userName" placeholder="Username" required>
+            </div>
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="pwd" placeholder="Password" required>
+            </div>
+            <button type="submit" id="myButton" class="btn1 btn mt-3">Login</button>
+        </form>
+        
+    </div>
+     <!-- Hidden element for error message -->
+     <div id="error-message" data-error="{% if error_message %}{{ error_message }}{% endif %}" style="display:none;"></div>
+    </div>
+
+    <script>
+        var backgroundImageArray = [
+            "{% static 'images/po.jpg' %}",
+            "{% static 'images/1398865.jpg' %}",
+            "{% static 'images/im4.jpg' %}"
+        ];
+
+        function changeBackgroundImage() {
+            var randomIndex = Math.floor(Math.random() * backgroundImageArray.length);
+            var selectedImage = backgroundImageArray[randomIndex];
+            document.body.style.backgroundImage = 'url(' + selectedImage + ')';
+        }
+
+       
+    </script>
+    <script>
+         function displayErrorMessage() {
+            var errorMessageElement = document.getElementById('error-message');
+            var errorMessage = errorMessageElement.getAttribute('data-error');
+            if (errorMessage) {
+                window.alert(errorMessage);
+            }
+        }
+
+        window.onload = function() {
+            changeBackgroundImage();
+            displayErrorMessage();
+        };
+    </script>
+</body>
+</html>

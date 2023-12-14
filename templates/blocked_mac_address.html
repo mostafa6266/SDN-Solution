@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Blocked_Mac_Address</title>
+    <link rel="stylesheet" href="{% static 'switching.css'%}">
+    <link rel="stylesheet" href="{% static 'home.css' %} ">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li style="margin-top: 20px;"><a href="/">Home</a></li>
+            <li style="margin-top: 20px;"><a href="/switching">switching</a></li>
+            <li style="margin-top: 20px;"><a href="/search">Search</a></li>
+            <li style="margin-top: 20px;"><a href="#">services</a></li>
+        </ul>
+    </nav>
+ 
+
+    {% block content %}
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Button for Core Block -->
+        <button type="submit" name="action" value="core_block">Check Core Block</button>
+
+        <!-- Button for All Block -->
+        <button type="submit" name="action" value="all_block">Check All Block</button>
+
+        <!-- Button for Getting MAC Address Table -->
+        <button type="submit" name="action" value="git_mac">Get MAC Address Table</button>
+        <!-- Button for backup -->
+        <button type="submit" name="action" value="backup">Get backup</button>
+        <!-- Button for migration -->
+        <button type="submit" name="action" value="migration">migration</button>
+    </form>
+{% endblock %}
+
+    
+        </div>
+
+    <script src="{% static 'switching.js'%}"></script>
+</body>
+
+</html>

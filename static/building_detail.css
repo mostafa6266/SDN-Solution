@@ -1,0 +1,24 @@
+body {
+    display: block;
+    background-image: url(test.jpg);
+    justify-content: space-evenly;
+    height: 100vh;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding: 20px;
+}
+
+.switch-box {
+    border: 10px solid #cccccc22;
+    padding: 10px;
+    margin: 10px;
+    background-color: #a6a0a6;
+    text-align: center;
+    border-radius: 10%; /* This makes the box circular */
+    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.2);
+    
+}

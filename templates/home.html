@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+    <title>NETWORK?</title>
+  
+
+    <!-- Vendor CSS Files -->
+    <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+  
+    <!-- 
+  ======================================================== -->
+        <style>
+
+#header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10; /* Lower z-index than the modal */
+    /* ... other styles ... */
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    z-index: 100; /* Higher z-index to overlay on top of other content, including the header */
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+    /* ... other styles ... */
+}
+
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Add styles for your progress bars */
+.progress-container {
+    background-color: #ff0000;
+    height: 200px;
+    width: 100px;
+    position: relative;
+}
+
+.progress-bar {
+    background-color: green;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+/* Table styles */
+.switch-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.switch-table th,
+.switch-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.switch-table th {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+}
+
+.status-down {
+    color: red;
+}
+
+.status-up {
+    color: green;
+}
+
+
+/* Rest of your styles for table, status-down, status-up, etc. */
+
+
+
+        </style>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center">
+            <div>
+            <h2 style="margin-left: -285px; padding-left: 10px; font-size: 30px; color: rgb(238, 237, 238);">ASUH.SDN</h2>
+        </div>
+
+            <nav id="navbar" class="navbar" style="text-align: center; padding-left: 1030px;">
+                <ul >
+                    <li><a class="nav-link scrollto active" href="/" style="font-size: 17px;" >Home</a></li>
+                    <li><a href="/search" style="font-size: 17px;" >Search</a></li> 
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/switching/">Switches</a></li>
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/acsess_point/">Access Point</a></li>
+                    
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <li>  <button class="getstarted scrollto" type="submit">Logout</button></li>
+                    </form>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+                
+            </nav>
+            <!-- .navbar -->
+          
+        </div>
+    
+        
+    </header>
+    <!-- End Header -->
+
+    <main id="main">
+
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container" style="display: flex; justify-content: space-between; padding: 5; margin: 10px;;">
+                <!-- Logo container -->
+                <div style="width: 100px; height: 100px; margin-top: 0; padding-top: 0;">
+                    <img src="../static/images/asuh-removebg-preview.png" alt="" style="width: 100%; height: auto;">
+                </div>
+
+            </div>
+        </section>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Switch Details</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="switchDetails"></div>
+                </div>
+            </div>
+        </div>
+          
+    
+        <!-- ======= Clients Section ======= -->
+       
+       <!-- The Close Button in the Modal -->
+<section id="clients" class="clients section-bg" style="background-color: white;" >
+    <div class="container">
+        <div class="row">
+          <!-- Core Switches Column -->
+          <div class="col d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
+            <!-- Counts at the top -->
+            <div style="color: rgba(40, 58, 90, 0.9); margin-bottom: 5px; font-weight: bold;font-size: 23px;">
+              {{ core_up_count }} / {{ core_total_count }}
+            </div>
+            <!-- Progress bar container -->
+            <div class="progress-container" style="height: 200px; width: 100px; background-color: #e26060; position: relative;" onclick="openModal('core')">
+              <!-- Dynamic progress bar -->
+              <div class="progress-bar" style="height: {{ core_percentage_up }}%; background-color: #4cb84c; width: 100%; position: absolute; bottom: 0;">
+              </div>
+            </div>
+            <!-- Label "Core" under the progress bar -->
+            <div style="color: rgba(40, 58, 90, 0.9); margin-top: 5px; font-weight: bold;font-size: 23px;">
+              Core
+            </div>
+          </div>
+          
+          <!-- Distribution Switches Column -->
+          <div class="col d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
+            <!-- Counts at the top -->
+            <div style="color: rgba(40, 58, 90, 0.9); margin-bottom: 5px; font-weight: bold;font-size: 23px;">
+              {{ distribution_up_count }} / {{ distribution_total_count }}
+            </div>
+            <!-- Progress bar container -->
+            <div class="progress-container" style="height: 200px; width: 100px; background-color: #e26060; position: relative;" onclick="openModal('distribution')">
+              <!-- Dynamic progress bar -->
+              <div class="progress-bar" style="height: {{ distribution_percentage_up }}%; background-color: #4cb84c; width: 100%; position: absolute; bottom: 0;">
+              </div>
+            </div>
+            <!-- Label "Distribution" under the progress bar -->
+            <div style="color: rgba(40, 58, 90, 0.9); margin-top: 5px;font-weight: bold; font-size: 23px;">
+              Distribution
+            </div>
+          </div>
+    
+          <!-- Other Switches Column -->
+          <div class="col d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="600">
+            <!-- Counts at the top -->
+            <div style="color: rgba(40, 58, 90, 0.9); margin-bottom: 5px;font-weight: bold;font-size: 23px;">
+              {{ other_up_count }} / {{ other_total_count }}
+            </div>
+            <!-- Progress bar container -->
+            <div class="progress-container" style="height: 200px; width: 100px; background-color: #e26060; position: relative;" onclick="openModal('other')">
+              <!-- Dynamic progress bar -->
+              <div class="progress-bar" style="height: {{ other_percentage_up }}%; background-color: #4cb84c; width: 100%; position: absolute; bottom: 0;">
+              </div>
+            </div>
+            <!-- Label "Access switches" under the progress bar --> 
+            <div style="color: rgba(40, 58, 90, 0.9); margin-top: 5px; font-weight: bold;font-size: 23px;">
+              Access switches
+            </div>
+          </div>
+        </div>
+      </div>
+      <meta http-equiv="refresh" content="180">
+
+<section id="services" class="services section-bg" style="background-color: white;">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+            <h2>Services</h2>
+            <h4 style="font-weight: bold;"> Ain Shams University Hospitals Software Defiend Network  </h4>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                <div class="icon-box">
+                    <div class="icon"><i class="bi bi-hdd-network"></i></div>
+                    <h4><a href="">Monitor </a></h4>
+                    <p style="font-size: 15px;" >Detect network status (up and dowun switches)</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+                <div class="icon-box">
+                    <div class="icon"><i class="bi bi-tools"></i></div>
+                    <h4><a href="">Automation</a></h4>
+                    <p style="font-size: 15px;" >can connect and configure switches (get backup and restore it ,git mac address table  , etc) </p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300">
+                <div class="icon-box">
+                    <div class="icon"><i class="bi bi-transparency"></i></div>
+                    <h4><a href="">Detect Mac</a></h4>
+                    <p style="font-size: 15px;">Can detect mac where from comes , block  or unblock it from core or his switch ,assign to vlan and show mac address of port of mac , etc</address> </p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400">
+                <div class="icon-box">
+                    <div class="icon"><i class="bx bx-layer"></i></div>
+                    <h4><a href="">Acsess Point</a></h4>
+                    <p style="font-size: 15px;" >It has all the access points of the old network in the database and can take actions from the switch side</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+</section>            
+
+<div>
+    <footer id="footer" style="position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* Adjust to your footer's height */
+    ">
+        <div class="container footer-bottom clearfix">
+            <div class="copyright">
+                &copy;<strong><span> Eng: Moustafa Mohamed</span></strong>
+            </div>
+            <div class="credits">
+                
+            </div>
+        </div>
+    </footer>
+</div> 
+
+
+                <script src="../static/assets/vendor/aos/aos.js "></script>
+                <script src="../static/assets/vendor/glightbox/js/glightbox.min.js "></script>
+                <script src="../static/assets/vendor/swiper/swiper-bundle.min.js "></script>
+             
+                <!-- Template Main JS File -->
+                <script src="../static/assets/js/main.js "></script>
+
+                <script>
+function openModal(category) {
+    fetch(`/get_switches/?category=${category}`)
+        .then(response => response.json())
+        .then(data => {
+            const switchDetails = document.getElementById('switchDetails');
+            switchDetails.innerHTML = `<table class="switch-table">
+                                         <thead>
+                                           <tr>
+                                             <th>Name</th>
+                                             <th>IP Address</th>
+                                             <th>Building</th>
+                                             <th>Status</th>
+                                           </tr>
+                                         </thead>
+                                         <tbody>
+                                         </tbody>
+                                       </table>`;
+            const tbody = switchDetails.querySelector('.switch-table tbody');
+
+            // Sort the switches with 'DOWN' status to the top
+            const sortedSwitches = data.switches.sort((a, b) => {
+                if (a.status === 'DOWN' && b.status !== 'DOWN') {
+                    return -1;
+                } else if (a.status !== 'DOWN' && b.status === 'DOWN') {
+                    return 1;
+                }
+                return 0;
+            });
+
+            // Render each switch in the table
+            sortedSwitches.forEach(sw => {
+                const statusSpan = `<span class="${sw.status === 'DOWN' ? 'status-down' : 'status-up'}">${sw.status}</span>`;
+                const row = `<tr>
+                               <td>${sw.name}</td>
+                               <td>${sw.ip_address}</td>
+                               <td>${sw.building}</td>
+                               <td>${statusSpan}</td>
+                             </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            document.getElementById('myModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching switch data:', error);
+        });
+}
+function closeModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
+// Add this at the end of your modal setup script
+document.addEventListener('DOMContentLoaded', function() {
+  // Close modal when user clicks on <span> (x)
+  document.querySelector('.close-btn').addEventListener('click', closeModal);
+
+  // Close the modal if the user clicks outside of it
+  window.onclick = function(event) {
+    if (event.target == document.getElementById('myModal')) {
+      closeModal();
+    }
+  }
+});
+
+
+                  </script>
+                  
+</body> 
+
+</html>

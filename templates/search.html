@@ -1,0 +1,333 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>searchResults?</title>
+
+    <!-- Favicons -->
+    <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+  
+  <style>
+    /* Additional styles */
+    .inline-button {
+    display: inline-block;
+}
+
+    #loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none; /* Initially hidden */
+    }
+    table {
+        width: 1500px;
+        height: 90px;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    title{
+        background-color: aqua;
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center">
+            <div>
+            <h2 style="margin-left: -285px; padding-left: 10px; font-size: 30px; color: rgb(238, 237, 238);">ASUH.SDN</h2>
+        </div>
+
+            <nav id="navbar" class="navbar" style="text-align: center; padding-left: 1030px;">
+                <ul >
+                    <li><a class="nav-link scrollto active" href="/" style="font-size: 17px;" >Home</a></li>
+                    <li><a href="/search" style="font-size: 17px;" >Search</a></li> 
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/switching/">Switches</a></li>
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/acsess_point/">Access Point</a></li>
+                    
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <li>  <button class="getstarted scrollto" type="submit">Logout</button></li>
+                    </form>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+                
+            </nav>
+            <!-- .navbar -->
+          
+        </div>
+    
+        
+    </header>
+    <!-- End Header -->
+
+    <main id="main">
+
+        <!-- ======= Breadcrumbs ======= -->
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container" style="display: flex; justify-content: space-between; padding: 5; margin: 10px;;">
+                <!-- Logo container -->
+                <div style="width: 100px; height: 100px; margin-top: 0; padding-top: 0;">
+                    <img src="../static/images/asuh-removebg-preview.png" alt="" style="width: 100%; height: auto;">
+                </div>
+
+            </div>
+        </section>
+        <div class="container"> 
+      
+    </div>
+            
+        <!-- End Breadcrumbs -->
+        <form method="GET" action="" id="search-form">
+            {% csrf_token %}
+            <div class="search-container" style="padding-right: 90px;">
+                <input type="text" id="search-input"  placeholder="Search..." name="mac" required pattern="^([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2}$" title="MAC Address in format 00-00-00-00-00-00">
+                <div style="padding-right: 90px;" >
+                <button style="align-items: center; background-color: rgba(40, 58, 90, 0.9)" type="submit" id="search-btn">Search</button>
+            </div>
+        </div>
+        </form >
+        <div style="display: flex; flex-direction: column; align-items: center; height: auto;">
+            <div id="loader">
+                <img src="../static/lst.gif" alt="Loading...">
+            </div>
+            {% if message %}
+          
+            <div style="padding-right: 100px; background-color: rgba(55, 68, 90, 0.9); border-radius: 100px; padding: 20px; width: 50%; margin: auto; text-align: center;">
+                    <b style="color: white; font-size: 25px;">{{ message }}</b>
+            </div>
+      
+            {% endif %}
+            <!-- Table for blocked MAC addresses -->
+            {% if mac_table %}
+            <h2>The MAC address table  for port {{ port }} is  </h2>
+            <table>
+                
+                <tr>
+                    <th>VLAN</th>
+                    <th>MAC Address</th>
+                    <th>Type</th>
+                    <th>Port</th>
+                </tr>
+                {% for entry in mac_table %}
+                <tr>
+                    <td>{{ entry.vlan }}</td>
+                    <td>{{ entry.mac_address }}</td>
+                    <td>{{ entry.type }}</td>
+                    <td>{{ entry.port }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+            {% endif %}
+            {% if blocked %}
+
+    <table>
+        <!-- Table headers -->
+        <tr>
+            <th>Switch IP</th>
+            <th>MAC Address</th>
+            <th>Status</th>
+            <th>VLAN</th>
+            <th>Reason</th>
+            <th>Date</th>
+        </tr>
+        <!-- Table rows -->
+        {% for mac in blocked_mac %}
+            <tr>
+                <td>{{ mac.switch_ip }}</td>
+                <td>{{ mac.mac_address }}</td>
+                <td style="color: red;">Blocked</td>
+                <td>{{ mac.vlan }}</td>
+                <td>{{ mac.reason }}</td>
+                <td>{{ mac.created_at }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+                <!-- Button to Undo Block, positioned below the table -->
+                <form method="POST" action="" style="margin-top: 20px;">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="undo_block"style="background-color: rgba(55, 68, 90, 0.9); ">Undo Block</button>
+                </form>
+            {% endif %}
+        
+            <!-- Table for device information -->
+            {% if device_ip %}
+                <table>
+                    <tr>
+                        <th>MAC address</th>
+                        <th>Building name</th>
+                        <th>Switch IP</th>
+                        <th>Place of switch</th>
+                        <th>Port on switch</th>
+                        <th>Access VLAN:</th>
+                        <th>IP Result</th>
+                    </tr>
+                    <tr>
+                        <td>{{ mac_address }}</td>
+                        <td>{{ building_name }}</td>
+                        <td>{{ device_ip }}</td>
+                        <td>{{ description }}</td>
+                        <td>{{ port }}</td>
+                        <td>{{ vlan }}</td>
+                        <td>{{ ip_result }}</td>
+                    </tr>
+                </table>
+           
+
+
+
+                <!-- Button to Block, positioned below the table -->
+                <!-- <form method="POST" action="" id="actionForm" >
+                    {% csrf_token %} -->
+                    <div style="padding-top: 50px; padding-right: 80px;" >
+                        <button class="inline-button" style="background-color: rgb(223, 166, 166);" type="button" onclick="BlockFormCore('{{ mac_address }}', '{{ vlan }}')">Block in core</button>
+                        <button class="inline-button" style="background-color: rgb(223, 166, 166);" type="button" onclick="BlockFormswitch('{{ device_ip }}','{{ mac_address }}', '{{ vlan }}')">Block in switch</button>
+                        <button class="inline-button" style="background-color: rgba(55, 68, 90, 0.9);" type="button" onclick="Change_velan('{{ device_ip }}','{{ port }}')">Assign to VLAN</button>
+                        <button class="inline-button" style="background-color: rgba(55, 68, 90, 0.9);" type="button" onclick="display_velan('{{ device_ip }}','{{ port }}')">show mac address</button>
+                    </div>
+                    
+                <!-- </form> -->
+                <form method="POST" action="" >   
+                    {% csrf_token %}               
+                    <div id="displayvlan" style="display: none; padding-top: 40px;">
+                        <input type="hidden" name="ipaddress" id="hIp">
+                        <input type="hidden" name="port" id="hport">
+                        <button  type="submit" name="action" value="show_mac" id="showMacButton" style="background-color: rgba(55, 68, 90, 0.9); " >Submit</button>
+                    </div>
+                </form>    
+                <form method="POST" action="" >   
+                    {% csrf_token %}               
+                    <div id="Changevlan" style="display: none; padding-top: 40px;">
+                        <input type="hidden" name="ipaddress" id="hiddenIp">
+                        <input type="hidden" name="port" id="hiddenport">
+                    
+                        <!-- Flex container -->
+                        <div style="display: flex; align-items: center;">
+                            <input type="text" name="vlan" placeholder="Enter New vlan" required style="flex-grow: 1;">
+                            <button type="submit" name="action" value="Change_vlan" style="background-color: rgba(55, 68, 90, 0.9); ">Submit</button>
+                        </div>
+                    </div>
+                    
+            </form>
+                <form method="POST" action="" >   
+                    {% csrf_token %}               
+                <div id="blockinswitch" style="display: none; padding-top: 40px;">
+                    <input type="hidden" name="ipaddress" id="hiddenIpInputSwitch">
+                    <input type="hidden" name="mac" id="hiddenMacInputSwitch">
+                    <input type="hidden" name="vlan" id="hiddenVlanInputSwitch">
+                    <div style="display: flex; align-items: center;">
+                    <input type="text" name="reason" placeholder="Enter Reason" required style="flex-grow: 1;">
+                    <button type="submit" name="action" value="in_switch" style="background-color: rgba(55, 68, 90, 0.9); " >Submit</button>
+                </div>
+                </div>
+            </form>
+            {% elif mac_address %}
+                <h2 style="color: red;">No result found for MAC address: {{ mac_address }}</h2>
+                <button class="inline-button" style="background-color: rgb(223, 166, 166);" type="button" onclick="BlockFormCore('{{ mac_address }}', '{{ vlan }}')">Block in core</button>
+
+            
+            {% endif %}
+            <form method="POST" action="" >
+                {% csrf_token %}
+                <div id="blockincore" style="display: none; padding-top: 40px;">
+                    <input type="hidden" name="mac" id="hiddenMacInputCore">
+                    <input type="hidden" name="vlan" id="hiddenVlanInputCore">
+                    <div style="display: flex; align-items: center;">
+
+                    <input type="text" name="reason" placeholder="Enter Reason" required style="flex-grow: 1;">
+                    <button type="submit" name="action" value="block_in_core" style="background-color: rgba(55, 68, 90, 0.9); " >Submit</button>
+                </div>
+                </div>
+            </form>    
+        </div>
+        
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <div style="padding-top: 500px;">
+    <footer id="footer" style="position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* Adjust to your footer's height */
+    ">
+        <div class="container footer-bottom clearfix">
+            <div class="copyright">
+                &copy;<strong><span>Eng: Moustafa Mohamed</span></strong>
+            </div>
+            <div class="credits">
+                
+            </div>
+        </div>
+    </footer>
+</div> 
+    <!-- End Footer -->
+
+    <script src="../static/assets/vendor/aos/aos.js "></script>
+    <script src="../static/assets/vendor/glightbox/js/glightbox.min.js "></script>
+    <script src="../static/assets/vendor/swiper/swiper-bundle.min.js "></script>
+ 
+    <!-- Template Main JS File -->
+    <script src="../static/assets/js/main.js "></script>
+    <script type="text/javascript">
+      function BlockFormCore(macAddress, vlan) {
+    document.getElementById('hiddenMacInputCore').value = macAddress;
+    document.getElementById('hiddenVlanInputCore').value = vlan;
+    document.getElementById('blockincore').style.display = 'block';
+}
+
+function BlockFormswitch(ipaddress, macAddress, vlan) {
+    document.getElementById('hiddenIpInputSwitch').value = ipaddress;
+    document.getElementById('hiddenMacInputSwitch').value = macAddress;
+    document.getElementById('hiddenVlanInputSwitch').value = vlan;
+    document.getElementById('blockinswitch').style.display = 'block';
+}
+function Change_velan(ipaddress, port) {
+    document.getElementById('hiddenIp').value = ipaddress;
+    document.getElementById('hiddenport').value = port;
+    document.getElementById('Changevlan').style.display = 'block';
+}
+
+function display_velan(ipaddress, port) {
+    document.getElementById('hIp').value = ipaddress;
+    document.getElementById('hport').value = port;
+    // document.getElementById('displayvlan').style.display = 'block';
+
+    // Trigger a click on the 'show_mac' button
+    document.getElementById('showMacButton').click();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+            var searchForm = document.getElementById('search-form');
+            searchForm.addEventListener('submit', function() {
+                document.getElementById('loader').style.display = 'block';
+            });
+        });
+
+    </script>
+    
+
+    
+    
+</body>
+
+</html>

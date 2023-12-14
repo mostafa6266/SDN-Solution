@@ -1,0 +1,321 @@
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+
+ 
+
+ 
+  <style>
+  
+
+table {
+        width: 1200px;
+        height: 200px;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f1f1f1;
+        width: 300px;
+    }
+/* Style for links to look like plain text */
+.plain-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center">
+            <div>
+            <h2 style="margin-left: -285px; padding-left: 10px; font-size: 30px; color: rgb(238, 237, 238);">ASUH.SDN</h2>
+        </div>
+
+            <nav id="navbar" class="navbar" style="text-align: center; padding-left: 1030px;">
+                <ul >
+                    <li><a class="nav-link scrollto active" href="/" style="font-size: 17px;" >Home</a></li>
+                    <li><a href="/search" style="font-size: 17px;" >Search</a></li> 
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/switching/">Switches</a></li>
+                    <li><a class="nav-link scrollto" style="font-size: 17px;" href="/acsess_point/">Access Point</a></li>
+                    
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <li>  <button class="getstarted scrollto" type="submit">Logout</button></li>
+                    </form>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+                
+            </nav>
+            <!-- .navbar -->
+          
+        </div>
+    
+        
+    </header>
+    <!-- End Header -->
+
+    <main id="main">
+        <section id="breadcrumbs" class="breadcrumbs">
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 5px; margin: 10px;">
+        
+                <!-- Logo container -->
+                <div style="width: 100px; height: 100px; margin-top: 0; padding-top: 0;">
+                    <img src="../static/images/asuh-removebg-preview.png" alt="" style="width: 100%; height: auto;">
+                </div>  
+                    </div>
+        </section>
+        
+        <div style="padding-left: 350px; font-size: 20px; font-weight: bold;display: grid; ">
+            <h1>Access Point Details</h1>
+            <table>
+                <tr>
+                    <th>IP</th>
+                    <td>{{ acsess.ip_address }}</td>
+
+                </tr>
+                <tr>
+                    <th>MAC address</th>
+                    <td>{{ acsess.mac_address }}</td>
+                </tr>
+                <tr>
+                    <th>admin user</th>
+                    <td>{{ acsess.admin_user }}</td>
+
+                </tr>
+                <tr>
+                    <th>admin password</th>
+                    <td>{{ acsess.admin_password }}</td>
+                </tr>
+
+                <tr>
+                    <th>vendor</th>
+                    <td>{{ acsess.vendor }}</td>
+
+                </tr>
+               
+                <tr>
+                    <th>vlan</th>
+                    <td>{{ acsess.vlan }}</td>
+
+                </tr>
+                <tr>
+                    <th > port status </th>
+                    <td>{{ acsess.port_status }}</td>
+    
+                </tr>   
+                <tr>
+                    <th>Wifi name</th>
+                    <td>{{ acsess.name }}</td>
+                </tr>
+                <tr>
+                    <th>wifi password</th>
+                    <td>{{ acsess.wifi_password }}</td>
+
+                </tr>
+                
+                    <th>human_name</th>
+                    <td>{{ acsess.human_name }}</td>
+            
+                </tr>
+                <tr>
+                    <th>Building</th>
+                    <td>{{ acsess.building }}</td>
+
+                </tr>
+                    <tr>
+                    <th>description</th>
+                    <td>{{ acsess.description }}</td>
+
+                </tr>
+           
+                    
+            </table>
+    
+        </div>
+        
+        <div style="padding-top: 50px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            {% if mac_data.device_ip %}
+            <form method="post" action="" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                {% csrf_token %}
+                <button name="action" value="Block in core" class="inline-button" style="background-color: rgb(223, 166, 166); margin-right: 10px;">Block in core</button>
+                {%if acsess.port_status == 'enable'%}
+                <button name="action" value="shutdown port" class="inline-button" style="background-color: rgb(223, 166, 166); margin-right: 10px;">shutdown port</button>
+                {%else%}
+                <button name="action" value="no shutdown port" class="inline-button" style="background-color: rgba(55, 68, 90, 0.9); margin-right: 10px;">no shutdown port</button>
+                {% endif %}
+                <button type="button" onclick="showVlanInput()" class="inline-button" style="background-color: rgba(55, 68, 90, 0.9); margin-right: 10px;">Assign to VLAN</button>
+                <button name="action" value="Show MAC Address" style="background-color: rgba(55, 68, 90, 0.9);">Show MAC Address</button>
+            </form>
+            <div id="vlanInput" style="display: none; margin-top: 10px;">
+                <form method="post" action="" style="display: flex; justify-content: center;">
+                    {% csrf_token %}
+                    <input type="text" name="vlan_number" placeholder="Enter VLAN Number">
+                    <button type="submit" name="action" value="Assign to VLAN">Submit</button>
+                </form>
+            </div>
+            {% else %}
+            <form method="post" action="" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                {% csrf_token %}
+                <button name="action" value="Block in core" class="inline-button" style="background-color: rgb(223, 166, 166);">Block in core</button>
+            </form>
+            {% endif %}
+            {% if not display %}
+            <form method="post" action="" style="display: flex; justify-content: center;">
+                {% csrf_token %}
+                <button name="action" value="take data" class="inline-button" style="background-color: rgba(55, 68, 90, 0.9);">take data</button>
+            </form>
+            {% endif %}
+        </div>
+        
+        <div style="padding-left: 100px; padding-top: 50px;">
+            {% if mac_table %}
+            <h2 style="text-align: center;">The MAC address table for {{ acsess.name }} is</h2>
+            <table style="width: 60%;height: 50%; margin: auto;">
+                <tr>
+                    <th style=" text-align: center;">VLAN</th>
+                    <th style=" text-align: center;">MAC Address</th>
+                    <th style=" text-align: center;">Type</th>
+                    <th style=" text-align: center;">Port</th>
+                </tr>
+                {% for entry in mac_table %}
+                <tr>
+                    <td style=" text-align: center;">{{ entry.vlan }}</td>
+                    <td style=" text-align: center;">{{ entry.mac_address }}</td>
+                    <td style=" text-align: center;">{{ entry.type }}</td>
+                    <td style=" text-align: center;">{{ entry.port }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+        
+        
+    </main>
+    <!-- End #main -->
+
+
+    <!-- ======= Footer ======= -->
+    <div style="padding-top: 250px;">
+        <footer id="footer" style="position: relative;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 60px; /* Adjust to your footer's height */
+        ">
+            <div class="container footer-bottom clearfix">
+                <div class="copyright">
+                    &copy;<strong><span>Eng: Moustafa Mohamed</span></strong>
+                </div>
+                <div class="credits">
+                    
+                </div>
+            </div>
+        </footer>
+    </div> 
+    <!-- End Footer -->
+
+    <script src="../static/assets/vendor/aos/aos.js "></script>
+    <script src="../static/assets/vendor/glightbox/js/glightbox.min.js "></script>
+    <script src="../static/assets/vendor/swiper/swiper-bundle.min.js "></script>
+ 
+    <!-- Template Main JS File -->
+    <script src="../static/assets/js/main.js "></script>
+    
+    <script>
+        function showVlanInput() {
+            var vlanInput = document.getElementById('vlanInput');
+            vlanInput.style.display = 'block';
+        }
+    </script>
+    
+        
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

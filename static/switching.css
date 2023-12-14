@@ -1,0 +1,51 @@
+body {
+    display: block;
+    background-image: url(test.jpg);
+    justify-content: space-evenly;
+    height: 100vh;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding: 20px;
+}
+
+#inputContainer {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    
+}
+
+.dynamicDiv {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#inputText {
+    width: 100%;
+    border-radius: 50px;
+    height: 40px;
+}
+
+button {
+    
+    width: 30%;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    background: #000000;
+    color: #fff;
+    border-radius: 20px;
+    transition: 0.5s;
+}
+
+button:hover {
+    background: #3b568f;
+    letter-spacing: 1px;
+}
