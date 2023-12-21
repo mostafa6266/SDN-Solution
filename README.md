@@ -5,3 +5,9 @@ You can also create a bot on Telegram and enter it into the program, as I have p
 There are more features than what I wrote. You can talk to me or try it yourself if you want to know them all
 
 (An important note: You must add the organization’s buildings before adding the switches. It is best to divide the switches into more than one building within the system so that you can benefit from all of its power.)
+
+![Login](/images/login.PNG)
+![Home Page](/images/home.PNG)
+![If Found](/images/if%20found.PNG)
+![Not Found](/images/notfound.PNG)
+![Switch](/images/sw.PNG)
